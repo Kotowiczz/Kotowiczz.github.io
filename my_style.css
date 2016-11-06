@@ -1,0 +1,42 @@
+body{
+    font-family: Economica;
+}
+.top-header{
+    background: #b93dff;
+    width: 100%;
+    height: 45px;
+}
+
+.wrapper{
+    width: 900px;
+    margin:0 auto;
+}
+
+.top-menu{
+    float: left;
+    line-height: 45px;
+}
+.top-menu ul li{
+    display: inline;
+    text-decoration: none;
+    float: left;
+    padding: 0px 17px;
+}
+.top-menu ul li, .top-menu ul li a{
+    color:white;
+    font-size: 25px;
+    text-decoration: none;
+    font-weight: 700;
+}
+.top-menu ul li:hover {
+    color:grey
+}
+.top-menu ul li:hover, .top-menu ul li:hover a{
+    background: #c0c0c0;
+}
+
+ul{
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
