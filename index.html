@@ -2,26 +2,16 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Minecraft Hearts Overlay</title>
+  <title>Minecraft Hearts</title>
   <style>
     body {
       background: transparent;
       margin: 0;
       padding: 10px;
-    }
-    #hearts {
-      display: flex;
-      gap: 4px;
+      font-size: 40px;
     }
     .heart {
-      font-size: 48px;
-      opacity: 0;
-      transform: scale(0.5);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    .heart.visible {
-      opacity: 1;
-      transform: scale(1);
+      margin: 2px;
     }
   </style>
 </head>
@@ -31,17 +21,15 @@
   <script>
     const maxHearts = 10;
     const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSP-XHwhWscbIlzSrUkssM7Jc9h3pXJUkn6xJkPxgv2PkYKDz8snKfkqFOMmyTNAlmtb1P6IfvivMpE/pub?output=csv";
-    const container = document.getElementById("hearts");
 
     function drawHearts(count) {
+      const container = document.getElementById("hearts");
       container.innerHTML = "";
       for (let i = 0; i < count; i++) {
         const heart = document.createElement("span");
         heart.className = "heart";
         heart.textContent = "❤️";
         container.appendChild(heart);
-        // Невелика затримка для каскадної анімації
-        setTimeout(() => heart.classList.add("visible"), i * 80);
       }
     }
 
@@ -53,7 +41,7 @@
         const count = Math.max(0, Math.min(maxHearts, parseInt(value)));
         drawHearts(count);
       } catch (e) {
-        console.error("Error loading sheet:", e);
+        console.error("Помилка завантаження:", e);
       }
     }
 
