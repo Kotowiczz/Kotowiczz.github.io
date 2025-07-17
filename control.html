@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Hearts Control Panel</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #f3f4f6;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    #count {
+      font-size: 48px;
+      margin: 20px 0;
+    }
+    button {
+      font-size: 24px;
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 8px;
+      background-color: #2563eb;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCFXz74_BQcwrCHptHBLM8SdQ3v993pKRc",
+      authDomain: "minecraft-hearts-overlay.firebaseapp.com",
+      databaseURL: "https://minecraft-hearts-overlay-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "minecraft-hearts-overlay",
+      storageBucket: "minecraft-hearts-overlay.firebasestorage.app",
+      messagingSenderId: "605689131743",
+      appId: "1:605689131743:web:8db0b54032cf1758dfaf6a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const heartsRef = ref(db, 'hearts');
+
+    let current = 0;
+    const countEl = document.getElementById('count');
+
+    async function updateDisplay() {
+      const snapshot = await get(heartsRef);
+      current = parseInt(snapshot.val()) || 0;
+      countEl.textContent = `❤️ x ${current}`;
+    }
+
+    async function setHearts(value) {
+      current = Math.max(0, Math.min(10, value));
+      await set(heartsRef, current);
+      updateDisplay();
+    }
+
+    document.getElementById('plus').onclick = () => setHearts(current + 1);
+    document.getElementById('minus').onclick = () => setHearts(current - 1);
+    document.getElementById('reset').onclick = () => setHearts(10);
+
+    updateDisplay();
+  </script>
+</head>
+<body>
+  <h1>❤️ Панель керування сердечками</h1>
+  <div id="count">❤️ x 0</div>
+  <div>
+    <button id="plus">➕</button>
+    <button id="minus">➖</button>
+    <button id="reset">🔄 Повні</button>
+  </div>
+</body>
+</html>
