@@ -24,21 +24,30 @@
       transform: scale(1);
     }
   </style>
-</head>
-<body>
-  <div id="hearts"></div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCFXz74_BQcwrCHptHBLM8SdQ3v993pKRc",
+      authDomain: "minecraft-hearts-overlay.firebaseapp.com",
+      databaseURL: "https://minecraft-hearts-overlay-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "minecraft-hearts-overlay",
+      storageBucket: "minecraft-hearts-overlay.firebasestorage.app",
+      messagingSenderId: "605689131743",
+      appId: "1:605689131743:web:8db0b54032cf1758dfaf6a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
     const maxHearts = 10;
-    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSP-XHwhWscbIlzSrUkssM7Jc9h3pXJUkn6xJkPxgv2PkYKDz8snKfkqFOMmyTNAlmtb1P6IfvivMpE/pub?output=csv";
     const container = document.getElementById("hearts");
     let currentCount = -1;
 
     function syncHearts(count) {
-      if (count === currentCount) return; // нічого не змінюється
+      if (count === currentCount) return;
       currentCount = count;
-
-      // Видаляємо/додаємо по різниці
       const existing = container.children.length;
 
       if (existing < count) {
@@ -56,20 +65,15 @@
       }
     }
 
-    async function updateHearts() {
-      try {
-        const res = await fetch(sheetURL);
-        const text = await res.text();
-        const [value] = text.trim().split(",");
-        const count = Math.max(0, Math.min(maxHearts, parseInt(value)));
-        syncHearts(count);
-      } catch (e) {
-        console.error("Error loading sheet:", e);
-      }
-    }
-
-    updateHearts();
-    setInterval(updateHearts, 2000);
+    const heartsRef = ref(db, 'hearts');
+    onValue(heartsRef, (snapshot) => {
+      const val = snapshot.val();
+      const count = Math.max(0, Math.min(maxHearts, parseInt(val)));
+      syncHearts(count);
+    });
   </script>
+</head>
+<body>
+  <div id="hearts"></div>
 </body>
 </html>
